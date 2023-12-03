@@ -45,7 +45,17 @@ class ArFragment : Fragment(R.layout.fragment_ar) {
                 frame.getUpdatedAugmentedImages().forEach { augmentedImage ->
                     if (augmentedImageNodes.none { it.imageName == augmentedImage.name }) {
                         val augmentedImageNode = AugmentedImageNode(engine, augmentedImage).apply {
-                            // TODO #3: Add a child ModelNode on the Augmented Image
+                            when (augmentedImage.name) {
+                                imageName -> addChildNode(
+                                    ModelNode(
+                                        modelInstance = modelLoader.createModelInstance(
+                                            "boss.glb"
+                                        ),
+                                        scaleToUnits = 0.002f,
+                                        centerOrigin = Position(x = -1f, y = -1f)
+                                    )
+                                )
+                            }
                         }
                         addChildNode(augmentedImageNode)
                         augmentedImageNodes += augmentedImageNode
