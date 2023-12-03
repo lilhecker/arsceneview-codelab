@@ -63,7 +63,9 @@ class ArFragment : Fragment(R.layout.fragment_ar) {
                 val session = sceneView.session?: return@registerForActivityResult
                 val config = session.config
                 val database = createAugmentedImageDatabaseWithSingleImage(session, imageUri)
-                // TODO #2b: Update the augmented image database of the session config
+                config.augmentedImageDatabase = database
+                config.updateMode = Config.UpdateMode.LATEST_CAMERA_IMAGE
+                session.configure(config)
             }
         }
         val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
@@ -75,7 +77,7 @@ class ArFragment : Fragment(R.layout.fragment_ar) {
     private fun createAugmentedImageDatabaseWithSingleImage(session: ARSession, imageUri: Uri): AugmentedImageDatabase {
         val database = AugmentedImageDatabase(session)
         val bmp = loadAugmentedImageBitmap(imageUri)
-        // TODO #2a: Add the image bitmap to the created augmented image database
+        database.addImage(imageName, bmp)
         return database
     }
 
